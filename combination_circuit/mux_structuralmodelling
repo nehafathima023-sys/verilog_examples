@@ -1,0 +1,58 @@
+// 4x1 Multiplexer using Structural Modeling
+module mux_4x1 (
+    input wire [3:0] data, // 4 data inputs
+    input wire [1:0] sel,  // 2-bit select input
+    output wire out        // Output
+);
+    wire not_sel0, not_sel1;
+    wire [3:0] mux_out;
+
+    // Invert select lines
+    not (not_sel0, sel[0]);
+    not (not_sel1, sel[1]);
+
+    // AND gates for each data input
+    and (mux_out[0], data[0], not_sel0, not_sel1);
+    and (mux_out[1], data[1], sel[0], not_sel1);
+    and (mux_out[2], data[2], not_sel0, sel[1]);
+    and (mux_out[3], data[3], sel[0], sel[1]);
+
+    // OR gate to combine the outputs
+    or (out, mux_out[0], mux_out[1], mux_out[2], mux_out[3]);
+endmodule
+
+// Test Bench for 4x1 Multiplexer
+module tb_mux_4x1;
+    reg [3:0] data;
+    reg [1:0] sel;
+    wire out;
+
+    // Instantiate the multiplexer
+    mux_4x1 uut (
+        .data(data),
+        .sel(sel),
+        .out(out)
+    );
+
+    initial begin
+        // Test cases
+        data = 4'b1010; // Data inputs
+        sel = 2'b00;    // Select input
+        #10;            // Wait for 10 time units
+        $display("sel=%b, out=%b", sel, out); // Expected output: 1
+
+        sel = 2'b01;    // Select input
+        #10;
+        $display("sel=%b, out=%b", sel, out); // Expected output: 0
+
+        sel = 2'b10;    // Select input
+        #10;
+        $display("sel=%b, out=%b", sel, out); // Expected output: 1
+
+        sel = 2'b11;    // Select input
+        #10;
+        $display("sel=%b, out=%b", sel, out); // Expected output: 0
+
+        $finish; // End simulation
+    end
+endmodule
