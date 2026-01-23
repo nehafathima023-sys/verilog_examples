@@ -1,23 +1,12 @@
-// Code your testbench here
-// or browse Examples
-module or_gate (
-    input  wire a,
-    input  wire b,
-    output wire y
-);
+`timescale 1ns/1ps
 
-assign y = a | b;
-
-endmodule
-timescale 1ns/1ps
-
-module tb_or_gate;
+module tb_xnor_gate;
 
     reg a, b;
     wire y;
 
     // Instantiate DUT
-    or_gate dut (
+    xnor_gate dut (
         .a(a),
         .b(b),
         .y(y)
